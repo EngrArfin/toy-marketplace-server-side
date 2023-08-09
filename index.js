@@ -29,12 +29,47 @@ async function run() {
     // Send a ping to confirm a successful connection
 
 
-    const serviceCollection = client.db('toyMarket').collection('services')
+    const serviceCollection = client.db('toyMarket').collection('services');
+    const bookingCollection = client.db('toyMarket').collection('toying');
     
     app.get('/services', async(req, res) =>{
       const cursor = serviceCollection.find();
       const result = await cursor.toArray();
       res.send(result);
+    })
+    
+
+    app.get('/services/:id', async(req, res) =>{
+      const id = req.params.id;
+      const query = {_id: new Object(id)}
+
+      const options = {
+        
+        // Include only the `title` and `imdb` fields in the returned document
+        projection: { title: 1, price: 1, service_id: 1  },
+      };
+
+
+      const result = await serviceCollection.findOne(query)
+      res.send(result);
+
+    })
+
+    //toying
+
+    app.get('/toying', async(req, res) =>{
+      const result = await bookingCollection.find().toArray();
+      res.send(result);
+    })
+    app.post('/toying', async(req, res) =>{
+      const toying = req.body;
+      console.log(toying);
+      const result = await bookingCollection.insertOne(toying);
+      res.send(result)
+
+      
+      
+
     })
 
     await client.db("admin").command({ ping: 1 });
@@ -45,8 +80,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
 
 
 app.get('/', (req, res) =>{
