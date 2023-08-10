@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config()
 const app = express();
@@ -28,7 +29,6 @@ async function run() {
     await client.connect();
     // Send a ping to confirm a successful connection
 
-
     const serviceCollection = client.db('toyMarket').collection('services');
     const bookingCollection = client.db('toyMarket').collection('toying');
     
@@ -38,7 +38,6 @@ async function run() {
       res.send(result);
     })
     
-
     app.get('/services/:id', async(req, res) =>{
       const id = req.params.id;
       const query = {_id: new Object(id)}
