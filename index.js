@@ -9,7 +9,6 @@ const port = process.env.PORT || 5000;
 //middleware
 app.use(cors());
 app.use(express.json());
-
 console.log(process.env.TOY_PASS)
 
 const uri = `mongodb+srv://${process.env.TOY_USER}:${process.env.TOY_PASS}@cluster0.xu7sm0d.mongodb.net/?retryWrites=true&w=majority`;
@@ -43,13 +42,10 @@ async function run() {
       const query = {_id: new Object(id)}
 
       const options = {
-        
-        // Include only the `title` and `imdb` fields in the returned document
         projection: { title: 1, price: 1, service_id: 1  },
       };
 
-
-      const result = await serviceCollection.findOne(query)
+      const result = await serviceCollection.findOne(query, options);
       res.send(result);
 
     })
@@ -57,6 +53,7 @@ async function run() {
     //toying
 
     app.get('/toying', async(req, res) =>{
+      
       const result = await bookingCollection.find().toArray();
       res.send(result);
     })
@@ -65,9 +62,6 @@ async function run() {
       console.log(toying);
       const result = await bookingCollection.insertOne(toying);
       res.send(result)
-
-      
-      
 
     })
 
