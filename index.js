@@ -30,6 +30,7 @@ async function run() {
 
     const serviceCollection = client.db('toyMarket').collection('services');
     const bookingCollection = client.db('toyMarket').collection('toying');
+    const toyingCollection = client.db('toyMarket').collection('toy');
     
     app.get('/services', async(req, res) =>{
       const cursor = serviceCollection.find();
@@ -61,6 +62,20 @@ async function run() {
       const toying = req.body;
       console.log(toying);
       const result = await bookingCollection.insertOne(toying);
+      res.send(result)
+
+    })
+
+    /* toy */
+    app.get('/toy', async(req, res) =>{
+      
+      const result = await toyingCollection.find().toArray();
+      res.send(result);
+    })
+    app.post('/toy', async(req, res) =>{
+      const toy = req.body;
+      console.log(toy);
+      const result = await toyingCollection.insertOne(toy);
       res.send(result)
 
     })
